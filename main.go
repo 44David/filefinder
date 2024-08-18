@@ -1,6 +1,10 @@
 package main
 
-import "github.com/charmbracelet/huh"
+import (
+	"errors"
+
+	"github.com/charmbracelet/huh"
+)
 
 
 func main() {
@@ -9,6 +13,13 @@ func main() {
 	huh.NewInput().
 		Title("Start searching").
 		Prompt("? ").
+		Validate(func(filename string) error {
+			if filename == "Test" { 
+				return errors.New("this file does not exist")
+			} 
+
+			return nil
+		}).
 		Value(&file).
 		Run()
 }
