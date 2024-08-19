@@ -2,11 +2,20 @@ package main
 
 import (
 	"errors"
-	"github.com/charmbracelet/huh"
-	"os/exec"
+	//"fmt"
 	"log"
+	"os"
+	"os/exec"
+
+	"github.com/charmbracelet/huh"
 )
 
+
+func fileExist(file string) bool {
+	_, error := os.Stat(file)
+
+	return !errors.Is(error, os.ErrNotExist)
+}
 
 func main() {
 	var file string
@@ -21,7 +30,7 @@ func main() {
 		Title(string(out)).
 		Prompt("? ").
 		Validate(func(filename string) error {
-			if filename == "Test" { 
+			if !fileExist(filename) { 
 				return errors.New("this file does not exist")
 			} 
 
@@ -29,6 +38,6 @@ func main() {
 		}).
 		Value(&file).
 		Run()
-	
+
 	
 }
