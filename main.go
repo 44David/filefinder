@@ -2,11 +2,10 @@ package main
 
 import (
 	"errors"
-	//"fmt"
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
-
 	"github.com/charmbracelet/huh"
 )
 
@@ -39,5 +38,17 @@ func main() {
 		Value(&file).
 		Run()
 
+	nano, nanoError := exec.LookPath("nano")
+	if err != nil {
+		log.Fatal(nanoError)
+	} 
+	
+	// TODO fix this
+	cmd := exec.Command(nano, file)
+	cmdError := cmd.Run()
+
+	if cmdError != nil {
+		fmt.Println(cmdError.Error())
+	}
 	
 }
