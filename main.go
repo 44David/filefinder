@@ -28,6 +28,7 @@ func main() {
 	huh.NewInput().
 		Title(string(out)).
 		Prompt("? ").
+		//TODO check if string is a folder or file
 		Validate(func(filename string) error {
 			if !fileExist(filename) { 
 				return errors.New("this file does not exist")
@@ -38,17 +39,37 @@ func main() {
 		Value(&file).
 		Run()
 
-	nano, nanoError := exec.LookPath("nano")
-	if err != nil {
-		log.Fatal(nanoError)
-	} 
 	
-	// TODO fix this
-	cmd := exec.Command(nano, file)
-	cmdError := cmd.Run()
-
-	if cmdError != nil {
-		fmt.Println(cmdError.Error())
+	fileInfo, err := os.Stat(file)
+	if err != nil {
+		fmt.Println(err)
 	}
+
+	if fileInfo.IsDir() {
+		cmdDir := exec.Command("code", file)
+		cmdDirError := cmdDir.Run()
+
+		if cmdDirError != nil {
+			fmt.Println(cmdDirError.Error())
+		}	
+
+	} else {
+		nano, nanoError := exec.LookPath("nano")
+		if err != nil {
+			log.Fatal(nanoError)
+		} 
+		
+		//TODO fix this
+		cmd := exec.Command("sudo", nano, file)
+		cmdError := cmd.Run()
+
+		if cmdError != nil {
+			fmt.Println(cmdError.Error())
+		}
+
+	}
+
+
+
 	
 }
