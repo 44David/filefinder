@@ -16,8 +16,9 @@ func fileExist(file string) bool {
 	return !errors.Is(error, os.ErrNotExist)
 }
 
+
 func main() {
-	var file string
+	var input string
 
 
 	out, err := exec.Command("ls").Output()
@@ -36,18 +37,20 @@ func main() {
 
 				return nil
 		}).
-		Value(&file).
+		Value(&input).
 		Run()
 
 	
-	fileInfo, err := os.Stat(file)
+	fileInfo, err := os.Stat(input)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	if fileInfo.IsDir() {
-		cmdDir := exec.Command("code", file)
+		cmdDir := exec.Command("code", input)
+		fmt.Println("Opening directory...")
 		cmdDirError := cmdDir.Run()
+		fmt.Println("Opened.")
 
 		if cmdDirError != nil {
 			fmt.Println(cmdDirError.Error())
@@ -59,8 +62,11 @@ func main() {
 			log.Fatal(nanoError)
 		} 
 		
-		//TODO fix this
-		cmd := exec.Command("sudo", nano, file)
+		cmd := exec.Command("sudo", nano, input)
+		cmd.Stdin = os.Stdin
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+
 		cmdError := cmd.Run()
 
 		if cmdError != nil {
