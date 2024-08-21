@@ -19,8 +19,7 @@ func fileExist(file string) bool {
 
 func main() {
 	var input string
-	//var baseRegex string
-
+	
 	defStyle := tcell.StyleDefault.Background(tcell.ColorReset).Foreground(tcell.ColorReset)
 
 	screen, screenErr := tcell.NewScreen()
