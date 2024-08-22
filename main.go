@@ -31,42 +31,29 @@ func main() {
 	}
 
 	screen.SetStyle(defStyle)
-	screen.Show()
 	screen.Clear()
 
-	ev := screen.PollEvent()
 
-	switch ev := ev.(type) {
-		case *tcell.EventResize:
-			screen.Sync()
+	for {
+		screen.Show()
+		ev := screen.PollEvent()
 
-		case *tcell.EventKey:
-			if ev.Key() == tcell.KeyEscape {
-				return
-			}
-			fmt.Println(ev.Key())
+		switch ev := ev.(type) {
+			case *tcell.EventResize:
+				screen.Sync()
+
+			case *tcell.EventKey:
+				if ev.Key() == tcell.KeyEscape {
+					return
+				}
+				fmt.Println(ev.Key())
+		}
 	}
-
 
 	out, err := exec.Command("ls").Output()
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	// huh.NewInput().
-	// 	Title(string(out)).
-	// 	Prompt("? ").
-	// 	//TODO check if string is a folder or file
-	// 	Validate(func(filename string) error {
-	// 		if !fileExist(filename) { 
-	// 			return errors.New("this file does not exist")
-	// 		} 
-
-	// 			return nil
-	// 	}).
-	// 	Value(&input).
-	// 	Run()
-
 
 	fmt.Println(string(out))
 	fmt.Scan(&input)
@@ -105,8 +92,4 @@ func main() {
 		}
 
 	}
-
-
-
-	
 }
