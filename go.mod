@@ -2,7 +2,10 @@ module code/main
 
 go 1.23.0
 
-require github.com/gdamore/tcell/v2 v2.7.4
+require (
+	github.com/gdamore/tcell/v2 v2.7.4 // indirect
+	github.com/rivo/tview v0.0.0-20240818110301-fd649dbf1223
+)
 
 require (
 	github.com/gdamore/encoding v1.0.0 // indirect
