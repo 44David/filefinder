@@ -8,7 +8,6 @@ import (
 	"os"
 	"os/exec"
 	"strings"
-
 	"github.com/peterh/liner"
 )
 
@@ -16,11 +15,7 @@ var Cyan = "\033[36m"
 var Green = "\033[32m"
 var defaultColor = "\033[0m"
 
-
-
 var names []string
-
-
 
 
 func config() {
@@ -42,8 +37,16 @@ func config() {
 	})
 
 	fmt.Printf(Green + "vim \nnano\n" + defaultColor)
-	if editor, err := line.Prompt("Type option: "); err == nil {
-		fmt.Println(editor)
+	if input, err := line.Prompt("Type option: "); err == nil {
+
+		configFile, err := os.Create("config.txt") 
+		if err != nil {
+			fmt.Println(err)
+			return
+		} 
+
+		configFile.WriteString(input)
+
 	}
 }
 
@@ -104,12 +107,8 @@ func main() {
 			}	
 
 		} else {
-			nano, nanoError := exec.LookPath("nano")
-			if err != nil {
-				log.Fatal(nanoError)
-			} 
 			
-			cmd := exec.Command("sudo", nano, input)
+			cmd := exec.Command("sudo", "nano", input)
 			cmd.Stdin = os.Stdin
 			cmd.Stdout = os.Stdout
 			cmd.Stderr = os.Stderr
