@@ -21,11 +21,9 @@ func fileExist(file string) bool {
 	return !errors.Is(error, os.ErrNotExist)
 }
 
-
-var (
-	names = []string{"go.mod", "main.go"}
-)
-
+	var (
+		names []string
+	)
 
 
 func main() {
@@ -36,6 +34,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}	
+
+	names = strings.Split(strings.ToLower(string(out)), "\n")
 
 	line := liner.NewLiner()
 	defer line.Close()
