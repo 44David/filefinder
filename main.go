@@ -6,8 +6,6 @@ import (
 	"log"
 	"os"
 	"os/exec"	
-	"github.com/rivo/tview"
-	"github.com/gdamore/tcell/v2"
 )
 
 
@@ -20,26 +18,15 @@ func fileExist(file string) bool {
 
 func main() {
 	var input string
-	
-	app := tview.NewApplication()
-	inputField := tview.NewInputField().
-		SetLabel("? ").
-		SetFieldWidth(100).
-		SetAcceptanceFunc(tview.InputFieldMaxLength(100)).
-		SetDoneFunc(func(key tcell.Key) {
-			app.Stop()
-		})
 
-	if err := app.SetRoot(inputField, true).SetFocus(inputField).Run(); err != nil {
-		panic(err)
-	}
- 
+
 	out, err := exec.Command("ls").Output()
 	if err != nil {
 		log.Fatal(err)
-	}
-
+	}	
+	
 	fmt.Println(string(out))
+
 	fmt.Scan(&input)
 	
 	
