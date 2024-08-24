@@ -4,8 +4,14 @@ import (
 	"errors"
 	"fmt"
 	"log"
+
+	//"fmt"
+	//"log"
 	"os"
-	"os/exec"	
+	"os/exec"
+	"strings"
+
+	"github.com/peterh/liner"
 )
 
 
@@ -16,19 +22,47 @@ func fileExist(file string) bool {
 }
 
 
-func main() {
-	var input string
+var (
+	names = []string{"go.mod", "main.go"}
+)
 
+
+
+func main() {
+
+	var input string
 
 	out, err := exec.Command("ls").Output()
 	if err != nil {
 		log.Fatal(err)
 	}	
-	
+
+	line := liner.NewLiner()
+	defer line.Close()
+
+	line.SetCtrlCAborts(true)
+
+	line.SetCompleter(func(line string) (c []string) {
+		for _, n := range names {
+			if strings.HasPrefix(n, strings.ToLower(line)) {
+				c = append(c, n)
+			}
+		}
+		return
+	})
+
 	fmt.Println(string(out))
 
-	fmt.Scan(&input)
-	
+	if file, err := line.Prompt("? "); err == nil {
+		log.Print("This is the name: ", file)
+		input = file
+	} else if err == liner.ErrPromptAborted {
+		log.Print("Process stopped")
+	} else {
+		log.Print("Error reading line.")
+	}
+
+
 	
 	fileInfo, err := os.Stat(input)
 	if err != nil {
