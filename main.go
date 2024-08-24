@@ -1,7 +1,7 @@
 package main
 
 import (
-	"errors"
+	//"errors"
 	"fmt"
 	"log"
 
@@ -14,16 +14,10 @@ import (
 	"github.com/peterh/liner"
 )
 
-
-func fileExist(file string) bool {
-	_, error := os.Stat(file)
-
-	return !errors.Is(error, os.ErrNotExist)
-}
-
-	var (
-		names []string
-	)
+var Cyan = "\033[36m"
+var defaultColor = "\033[0m"
+	
+var names []string
 
 
 func main() {
@@ -51,18 +45,16 @@ func main() {
 		return
 	})
 
-	fmt.Println(string(out))
+
+	fmt.Println(Cyan + string(out) + defaultColor)
 
 	if file, err := line.Prompt("? "); err == nil {
-		log.Print("This is the name: ", file)
 		input = file
 	} else if err == liner.ErrPromptAborted {
 		log.Print("Process stopped")
 	} else {
 		log.Print("Error reading line.")
 	}
-
-
 	
 	fileInfo, err := os.Stat(input)
 	if err != nil {
