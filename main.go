@@ -1,21 +1,21 @@
 package main
 
 import (
-	//"errors"
 	"fmt"
 	"log"
-	//"log"
 	"os"
 	"os/exec"
 	"strings"
-	"github.com/peterh/liner"
 	"github.com/charmbracelet/huh"
+	"github.com/peterh/liner"
 )
 
-var Cyan = "\033[36m"
-var Green = "\033[32m"
-var defaultColor = "\033[0m"
+var (
 
+Cyan = "\033[36m"
+Green = "\033[32m"
+defaultColor = "\033[0m"
+)
 var names []string
 var editor string
 
@@ -31,13 +31,13 @@ func config() {
 		Run()
 
 
-	configFile, err := os.Create("config.txt") 
-	if err != nil {
-		fmt.Println(err)
-		return
-	} 
+		configFile, err := os.Create("config.txt") 
+		if err != nil {
+			fmt.Println(err)
+			return
+		} 
 
-	configFile.WriteString(editor)
+		configFile.WriteString(editor)
 
 	}
 
@@ -99,8 +99,13 @@ func main() {
 			}	
 
 		} else {
-			
-			cmd := exec.Command("sudo", "nano", input)
+			textEditor, err := os.ReadFile("config.txt")
+			if err != nil {
+				log.Fatal(err)
+			}
+
+		
+			cmd := exec.Command("sudo", string(textEditor), input)
 			cmd.Stdin = os.Stdin
 			cmd.Stdout = os.Stdout
 			cmd.Stderr = os.Stderr
