@@ -9,6 +9,7 @@ import (
 	"os/exec"
 	"strings"
 	"github.com/peterh/liner"
+	"github.com/charmbracelet/huh"
 )
 
 var Cyan = "\033[36m"
@@ -16,39 +17,30 @@ var Green = "\033[32m"
 var defaultColor = "\033[0m"
 
 var names []string
-
+var editor string
 
 func config() {
-	line := liner.NewLiner()
-	defer line.Close()
 
-	
-	line.SetCtrlCAborts(true)
+	huh.NewSelect[string]().
+		Title("Choose your preferred text editor").
+		Options(
+			huh.NewOption("Vim", "vim"),
+			huh.NewOption("Nano", "nano"),
+		).
+		Value(&editor).
+		Run()
 
-	var editors = []string{"vim", "nano"}
 
-	line.SetCompleter(func(line string) (c []string) {
-		for _, n := range editors {
-			if strings.HasPrefix(n, strings.ToLower(line)) {
-				c = append(c, n)
-			}
-		}
+	configFile, err := os.Create("config.txt") 
+	if err != nil {
+		fmt.Println(err)
 		return
-	})
+	} 
 
-	fmt.Printf(Green + "vim \nnano\n" + defaultColor)
-	if input, err := line.Prompt("Type option: "); err == nil {
-
-		configFile, err := os.Create("config.txt") 
-		if err != nil {
-			fmt.Println(err)
-			return
-		} 
-
-		configFile.WriteString(input)
+	configFile.WriteString(editor)
 
 	}
-}
+
 
 func main() {
 
