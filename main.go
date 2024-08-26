@@ -11,11 +11,11 @@ import (
 )
 
 var (
-
-Cyan = "\033[36m"
-Green = "\033[32m"
-defaultColor = "\033[0m"
+	Cyan = "\033[36m"
+	Green = "\033[32m"
+	defaultColor = "\033[0m"
 )
+
 var names []string
 var editor string
 
@@ -31,15 +31,15 @@ func config() {
 		Run()
 
 
-		configFile, err := os.Create("config.txt") 
-		if err != nil {
-			fmt.Println(err)
-			return
-		} 
+	configFile, err := os.Create("config.txt") 
+	if err != nil {
+		fmt.Println(err)
+		return
+	} 
 
-		configFile.WriteString(editor)
+	configFile.WriteString(editor)
 
-	}
+}
 
 
 func main() {
@@ -56,7 +56,7 @@ func main() {
 			log.Fatal(err)
 		}	
 
-		names = strings.Split(strings.ToLower(string(out)), "\n")
+		names = strings.Split((string(out)), "\n")
 
 		line := liner.NewLiner()
 		defer line.Close()
@@ -65,7 +65,7 @@ func main() {
 
 		line.SetCompleter(func(line string) (c []string) {
 			for _, n := range names {
-				if strings.HasPrefix(n, strings.ToLower(line)) {
+				if strings.HasPrefix(n, strings.Title(line)) {
 					c = append(c, n)
 				}
 			}
