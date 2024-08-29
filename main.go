@@ -30,7 +30,6 @@ func config() {
 		Value(&editor).
 		Run()
 
-
 	configFile, err := os.Create("config.txt") 
 	if err != nil {
 		fmt.Println(err)
@@ -38,7 +37,6 @@ func config() {
 	} 
 
 	configFile.WriteString(editor)
-
 }
 
 
@@ -48,7 +46,6 @@ func main() {
 		config()
 
 	} else {
-
 		var input string
 
 		out, err := exec.Command("ls").Output()
@@ -65,13 +62,12 @@ func main() {
 
 		line.SetCompleter(func(line string) (c []string) {
 			for _, n := range names {
-				if strings.HasPrefix(n, strings.Title(line)) {
+				if strings.HasPrefix(strings.ToLower(n), line) {
 					c = append(c, n)
 				}
 			}
 			return
 		})
-
 
 		fmt.Println(Cyan + string(out) + defaultColor)
 
@@ -82,6 +78,7 @@ func main() {
 		} else {
 			log.Print("Error reading line.")
 		}
+
 		
 		fileInfo, err := os.Stat(input)
 		if err != nil {
