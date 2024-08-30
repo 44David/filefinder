@@ -13,6 +13,7 @@ import (
 var (
 	Cyan = "\033[36m"
 	Green = "\033[32m"
+	Red = "\033[31m"
 	defaultColor = "\033[0m"
 )
 
@@ -82,7 +83,7 @@ func main() {
 		
 		fileInfo, err := os.Stat(input)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Println(Red + "*file was not found*" + defaultColor)
 		}
 
 		if fileInfo.IsDir() {
@@ -92,13 +93,13 @@ func main() {
 			fmt.Println("Opened.")
 
 			if cmdDirError != nil {
-				fmt.Println(cmdDirError.Error())
+				fmt.Println(Red + "*could not open directory*" + defaultColor)
 			}	
 
 		} else {
 			textEditor, err := os.ReadFile("config.txt")
 			if err != nil {
-				log.Fatal(err)
+				fmt.Println(Red + "*an error occurred with your preferred text editor*" + defaultColor)
 			}
 
 		
@@ -110,7 +111,12 @@ func main() {
 			cmdError := cmd.Run()
 
 			if cmdError != nil {
-				fmt.Println(cmdError.Error())
+				if string(textEditor) == "" {
+					fmt.Println(Red + "*could not find a preferred text editor")
+				} else {
+					fmt.Println(Red + "*could not open file in " + string(textEditor) + "*" + defaultColor)
+				}
+				
 			}
 
 		}
